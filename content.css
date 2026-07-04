@@ -1,0 +1,1376 @@
+/* ==========================================================================
+   Python Docs Beautifier - Material Theme (content.css)
+   ========================================================================== */
+
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=JetBrains+Mono:wght@400;500;600;700&display=swap');
+
+/* ==========================================================================
+   Design Tokens & CSS Custom Properties
+   ========================================================================== */
+:root {
+  /* Dark Theme: "Midnight Slate" — One Dark Pro inspired */
+
+  /* Backgrounds — cool dark blue-grey (Slate-950 / 900) */
+  --md-bg-default:      #0d1117;
+  --md-bg-default-rgb:  13, 17, 23;
+  --md-bg-paper:        #161b22;
+  --md-bg-paper-rgb:    22, 27, 34;
+  --md-bg-accent-alpha: rgba(0, 212, 255, 0.07);
+
+  /* Text — very high contrast hierarchy */
+  --md-text-primary:   #e6edf3;  /* near-white, ~15:1 on bg-default */
+  --md-text-secondary: #8b949e;  /* grey-400 equiv, ~5.5:1 */
+  --md-text-muted:     #484f58;  /* very dim labels */
+
+  /* Brand — Vivid Cyan: pops on dark, distinct from any bg hue */
+  --md-primary:     #00d4ff;
+  --md-primary-rgb: 0, 212, 255;
+  --md-accent:      #38c9f0;
+  --md-accent-rgb:  56, 201, 240;
+
+  /* Borders */
+  --md-border-color: #30363d;
+  --md-border-light: #21262d;
+
+  /* Code Blocks */
+  --md-code-bg:          #010409;
+  --md-code-border:      #30363d;
+  --md-code-text:        #e6edf3;
+  --md-code-inline-bg:   #161b22;
+  --md-code-inline-text: #00d4ff;  /* cyan — matches brand, not garish pink */
+
+  /* Admonitions */
+  --md-note-color:    #58a6ff;
+  --md-note-bg:       rgba(88, 166, 255, 0.06);
+  --md-warning-color: #e3b341;
+  --md-warning-bg:    rgba(227, 179, 65, 0.06);
+  --md-danger-color:  #f85149;
+  --md-danger-bg:     rgba(248, 81, 73, 0.06);
+  --md-success-color: #3fb950;
+  --md-success-bg:    rgba(63, 185, 80, 0.06);
+
+  /* Layout */
+  --md-sidebar-width:     290px;
+  --md-toc-width:         270px;
+  --md-content-max-width: 860px;
+  --md-header-height:     58px;
+  --font-size-scale:      1;
+
+  --md-font-sans: "Inter", -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+  --md-font-mono: "JetBrains Mono", "Fira Code", monospace;
+
+  /* Shadows */
+  --md-shadow-sm:      0 1px 2px 0 rgba(0,0,0,0.3);
+  --md-shadow-md:      0 4px 6px -1px rgba(0,0,0,0.4), 0 2px 4px -1px rgba(0,0,0,0.2);
+  --md-shadow-lg:      0 10px 15px -3px rgba(0,0,0,0.5), 0 4px 6px -2px rgba(0,0,0,0.25);
+  --md-shadow-premium: 0 20px 25px -5px rgba(0,0,0,0.6), 0 10px 10px -5px rgba(0,0,0,0.3);
+
+  --transition-smooth: 0.22s cubic-bezier(0.4, 0, 0.2, 1);
+
+  color-scheme: dark;
+}
+
+/* Light Theme Variables: "Daylight" — GitHub Light / VS Code Light Modern */
+html[data-py-theme="light"] {
+  /* Backgrounds — clean white with warm-tinted paper */
+  --md-bg-default:      #ffffff;
+  --md-bg-default-rgb:  255, 255, 255;
+  --md-bg-paper:        #f6f8fa;  /* GitHub's page bg */
+  --md-bg-paper-rgb:    246, 248, 250;
+  --md-bg-accent-alpha: rgba(124, 58, 237, 0.05);
+
+  /* Text — rich contrast hierarchy */
+  --md-text-primary:   #1c2333;  /* near-black, ~18:1 on white */
+  --md-text-secondary: #57606a;  /* warm grey, ~6.5:1 */
+  --md-text-muted:     #8c959f;  /* dimmed labels, ~3.5:1 */
+
+  /* Brand — Rich Violet: distinct, professional, not generic blue */
+  --md-primary:     #7c3aed;
+  --md-primary-rgb: 124, 58, 237;
+  --md-accent:      #6d28d9;
+  --md-accent-rgb:  109, 40, 217;
+
+  /* Borders — warmer, more perceptible */
+  --md-border-color: #d0d7de;  /* GitHub's default border */
+  --md-border-light: #eaeef2;
+
+  /* Code Blocks */
+  --md-code-bg:          #f6f8fa;
+  --md-code-border:      #d0d7de;
+  --md-code-text:        #1c2333;
+  --md-code-inline-bg:   #eff1f3;
+  --md-code-inline-text: #7c3aed;  /* matches brand violet, not a second red */
+
+  /* Admonitions — stronger alpha so they're actually visible */
+  --md-note-color:    #0969da;
+  --md-note-bg:       rgba(9, 105, 218, 0.06);
+  --md-warning-color: #9a6700;
+  --md-warning-bg:    rgba(154, 103, 0, 0.06);
+  --md-danger-color:  #cf222e;
+  --md-danger-bg:     rgba(207, 34, 46, 0.06);
+  --md-success-color: #1a7f37;
+  --md-success-bg:    rgba(26, 127, 55, 0.06);
+
+  /* Shadows — slightly deeper for lift on white */
+  --md-shadow-sm:      0 1px 3px 0 rgba(31, 35, 40, 0.06);
+  --md-shadow-md:      0 4px 8px -2px rgba(31, 35, 40, 0.08), 0 2px 4px -1px rgba(31, 35, 40, 0.04);
+  --md-shadow-lg:      0 10px 20px -4px rgba(31, 35, 40, 0.10), 0 4px 8px -2px rgba(31, 35, 40, 0.06);
+  --md-shadow-premium: 0 20px 40px -8px rgba(31, 35, 40, 0.14);
+
+  color-scheme: light;
+}
+
+/* Sepia Comfort Reading Theme */
+html[data-py-theme="sepia"] {
+  --md-bg-default: #f4edd8;
+  --md-bg-default-rgb: 244, 237, 216;
+  --md-bg-paper: #eae2cc;
+  --md-bg-paper-rgb: 234, 226, 204;
+  --md-bg-accent-alpha: rgba(146, 64, 14, 0.05);
+
+  --md-text-primary: #433422;
+  --md-text-secondary: #60513e;
+  --md-text-muted: #8c7e6c;
+
+  --md-primary: #92400e;
+  --md-primary-rgb: 146, 64, 14;
+  --md-accent: #b45309;
+  --md-accent-rgb: 180, 83, 9;
+  --md-border-color: #d2caa8;
+  --md-border-light: #dfd8c2;
+
+  --md-code-bg: #eae2cc;
+  --md-code-border: #d2caa8;
+  --md-code-text: #433422;
+  --md-code-inline-bg: #dfd8c2;
+  --md-code-inline-text: #831843;
+
+  --md-note-color: #b45309;
+  --md-note-bg: rgba(180, 83, 9, 0.03);
+  --md-warning-color: #78350f;  /* amber-900: 7:1 on sepia bg — was #d97706 (invisible 2.4:1) */
+  --md-warning-bg:    rgba(120, 53, 15, 0.07);
+  --md-danger-color: #b91c1c;
+  --md-danger-bg: rgba(185, 28, 28, 0.03);
+  --md-success-color: #065f46;
+  --md-success-bg: rgba(6, 95, 70, 0.03);
+
+  --md-shadow-sm: 0 1px 2px 0 rgba(67, 52, 34, 0.02);
+  --md-shadow-md: 0 4px 6px -1px rgba(67, 52, 34, 0.05);
+  --md-shadow-lg: 0 10px 15px -3px rgba(67, 52, 34, 0.05);
+  --md-shadow-premium: 0 20px 25px -5px rgba(67, 52, 34, 0.05);
+
+  color-scheme: light;
+}
+
+/* FOUC Guard: Hide unstyled body until variables, structures settle */
+html:not([data-py-ready]) body {
+  opacity: 0 !important;
+  pointer-events: none !important;
+}
+
+/* ==========================================================================
+   Global Resets & Scrollbars
+   ========================================================================== */
+html {
+  overflow-x: hidden;
+  box-sizing: border-box;
+}
+
+body {
+  font-family: var(--md-font-sans) !important;
+  font-size: calc(15.5px * var(--font-size-scale)) !important;
+  line-height: 1.7 !important;
+  color: var(--md-text-primary) !important;
+  background-color: var(--md-bg-default) !important;
+  margin: 0 !important;
+  padding: 0 !important;
+  text-rendering: optimizeLegibility;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+  transition: background-color var(--transition-smooth), color var(--transition-smooth);
+}
+
+/* Modern Scrollbars */
+:root {
+  --scrollbar-thumb: var(--md-border-color);
+  --scrollbar-track: var(--md-bg-default);
+  scrollbar-color: var(--scrollbar-thumb) var(--scrollbar-track);
+  scrollbar-width: thin;
+}
+
+::-webkit-scrollbar {
+  width: 8px;
+  height: 8px;
+}
+::-webkit-scrollbar-track {
+  background: var(--md-bg-default);
+}
+::-webkit-scrollbar-thumb {
+  background: var(--md-border-color);
+  border-radius: 4px;
+}
+::-webkit-scrollbar-thumb:hover {
+  background: var(--md-text-muted);
+}
+
+/* Clean Up Sphinx Layout Anchors */
+div.clearer {
+  display: none !important;
+}
+
+/* ==========================================================================
+   CSS Grid: 3-Column Layout Overrides
+   ========================================================================== */
+div.document {
+  display: grid !important;
+  width: 100% !important;
+  max-width: 100vw !important;
+  min-height: 100vh !important;
+  background-color: var(--md-bg-default) !important;
+  box-sizing: border-box !important;
+  transition: grid-template-columns var(--transition-smooth) !important;
+  
+  /* Default: Expanded Left Sidebar, Center Content, Right ToC */
+  grid-template-columns: var(--md-sidebar-width) 1fr var(--md-toc-width) !important;
+  grid-template-areas: "sidebar content toc" !important;
+}
+
+/* Sidebar Collapsed state grid shift */
+html[data-py-sidebar="collapsed"] div.document {
+  grid-template-columns: 0px 1fr var(--md-toc-width) !important;
+}
+
+/* Responsive adjustment: Hide Table of Contents column on small screens */
+@media (max-width: 1200px) {
+  div.document {
+    grid-template-columns: var(--md-sidebar-width) 1fr 0px !important;
+    grid-template-areas: "sidebar content toc" !important;
+  }
+  html[data-py-sidebar="collapsed"] div.document {
+    grid-template-columns: 0px 1fr 0px !important;
+  }
+  .md-sidebar-toc {
+    display: none !important;
+  }
+}
+
+/* Mobile responsive view: Single Column content */
+@media (max-width: 768px) {
+  div.document {
+    grid-template-columns: 0px 1fr 0px !important;
+    grid-template-areas: "sidebar content toc" !important;
+  }
+  div.sphinxsidebar {
+    display: none !important;
+  }
+}
+
+/* ==========================================================================
+   Center Content styling (`div.documentwrapper`)
+   ========================================================================== */
+div.documentwrapper {
+  grid-area: content !important;
+  margin-left: 0 !important; /* overrides standard float left */
+  float: none !important;
+  width: 100% !important;
+  background-color: var(--md-bg-default) !important;
+  box-sizing: border-box !important;
+}
+
+div.bodywrapper {
+  padding: 40px 48px 96px 48px !important;
+  max-width: var(--md-content-max-width) !important;
+  margin: 0 auto !important;
+  box-sizing: border-box !important;
+}
+
+@media (max-width: 480px) {
+  div.bodywrapper {
+    padding: 24px 20px 64px 20px !important;
+  }
+}
+
+div.body {
+  background-color: var(--md-bg-default) !important;
+  min-width: 0 !important;
+}
+
+/* ==========================================================================
+   Typography & Headers
+   ========================================================================== */
+h1, h2, h3, h4, h5, h6 {
+  color: var(--md-text-primary) !important;
+  font-family: var(--md-font-sans) !important;
+  font-weight: 700 !important;
+  line-height: 1.25 !important;
+  letter-spacing: -0.025em !important;
+  margin-top: 1.8em !important;
+  margin-bottom: 0.6em !important;
+}
+
+h1 {
+  font-size: 2.2rem !important;
+  border-bottom: 1px solid var(--md-border-color) !important;
+  padding-bottom: 12px !important;
+  margin-top: 0.5em !important;
+  letter-spacing: -0.03em !important;
+}
+
+h2 {
+  font-size: 1.55rem !important;
+  border-bottom: 1px solid var(--md-border-light) !important;
+  padding-bottom: 6px !important;
+}
+
+h3 {
+  font-size: 1.25rem !important;
+}
+
+h4 {
+  font-size: 1.05rem !important;
+}
+
+p, li, dd {
+  color: var(--md-text-secondary) !important;
+  margin-top: 0 !important;
+  margin-bottom: 1.2em !important;
+  font-size: 1rem !important;
+}
+
+a {
+  color: var(--md-primary) !important;
+  text-decoration: underline !important;
+  text-decoration-color: rgba(var(--md-primary-rgb), 0.25) !important;
+  text-underline-offset: 4px !important;
+  font-weight: 500 !important;
+  transition: text-decoration-color var(--transition-smooth), color var(--transition-smooth) !important;
+}
+
+a:hover {
+  text-decoration-color: var(--md-primary) !important;
+  color: var(--md-accent) !important;
+}
+
+ul, ol {
+  padding-left: 22px !important;
+  margin-bottom: 1.2em !important;
+}
+
+li {
+  margin-bottom: 0.35em !important;
+}
+
+/* ==========================================================================
+   Left Navigation Sidebar (`div.sphinxsidebar`)
+   ========================================================================== */
+div.sphinxsidebar {
+  grid-area: sidebar !important;
+  position: sticky !important;
+  top: var(--md-header-height) !important;
+  height: calc(100vh - var(--md-header-height)) !important;
+  width: var(--md-sidebar-width) !important;
+  background-color: var(--md-bg-paper) !important;
+  border-right: 1px solid var(--md-border-color) !important;
+  overflow: hidden !important;
+  margin: 0 !important;
+  padding: 0 !important;
+  float: none !important;
+  box-shadow: none !important;
+  transition: transform var(--transition-smooth), visibility var(--transition-smooth) !important;
+  z-index: 80 !important;
+}
+
+/* Sidebar hidden transition */
+html[data-py-sidebar="collapsed"] div.sphinxsidebar {
+  transform: translateX(-100%) !important;
+  visibility: hidden !important;
+}
+
+div.sphinxsidebarwrapper {
+  height: 100% !important;
+  overflow-y: auto !important;
+  padding: 24px 20px 48px 20px !important;
+  box-sizing: border-box !important;
+  display: flex !important;
+  flex-direction: column !important;
+  gap: 24px !important;
+  overscroll-behavior: contain;
+}
+
+/* Heading styles inside sidebar */
+div.sphinxsidebar h3,
+div.sphinxsidebar h4 {
+  font-size: 0.725rem !important;
+  font-weight: 700 !important;
+  text-transform: uppercase !important;
+  letter-spacing: 0.08em !important;
+  color: var(--md-text-muted) !important;
+  border: none !important;
+  margin: 0 0 8px 0 !important;
+  padding: 0 !important;
+}
+
+div.sphinxsidebar ul {
+  list-style: none !important;
+  padding: 0 !important;
+  margin: 0 !important;
+}
+
+div.sphinxsidebar ul li {
+  margin-bottom: 4px !important;
+  position: relative;
+}
+
+div.sphinxsidebar ul li a {
+  display: block !important;
+  color: var(--md-text-secondary) !important;
+  padding: 6px 12px !important;
+  border-radius: 6px !important;
+  text-decoration: none !important;
+  font-family: var(--md-font-sans) !important;
+  font-size: 0.85rem !important;
+  font-weight: 500 !important;
+  line-height: 1.45 !important;
+  transition: all var(--transition-smooth) !important;
+}
+
+div.sphinxsidebar ul li a:hover {
+  background-color: var(--md-bg-accent-alpha) !important;
+  color: var(--md-primary) !important;
+}
+
+/* Nesting lines styling for sub-navigation */
+div.sphinxsidebar ul ul {
+  margin: 2px 0 2px 12px !important;
+  padding-left: 10px !important;
+  border-left: 1.5px solid var(--md-border-color) !important;
+}
+
+div.sphinxsidebar ul ul li a {
+  font-size: 0.825rem !important;
+  padding: 4px 10px !important;
+}
+
+/* Sphinx current active nav */
+div.sphinxsidebar li.current > a {
+  background-color: var(--md-bg-accent-alpha) !important;
+  color: var(--md-primary) !important;
+  font-weight: 600 !important;
+}
+
+/* Hide sphinx standard search box since we inject a modern header search */
+div.sphinxsidebar #searchbox {
+  display: none !important;
+}
+
+/* ==========================================================================
+   Right Table of Contents Sidebar (`.md-sidebar-toc`)
+   ========================================================================== */
+.md-sidebar-toc {
+  grid-area: toc !important;
+  position: sticky !important;
+  top: var(--md-header-height) !important;
+  height: calc(100vh - var(--md-header-height)) !important;
+  width: var(--md-toc-width) !important;
+  background-color: var(--md-bg-default) !important;
+  border-left: 1px solid var(--md-border-light) !important;
+  overflow-y: auto !important;
+  padding: 24px 20px 48px 20px !important;
+  box-sizing: border-box !important;
+  z-index: 75 !important;
+}
+
+.md-sidebar-toc h3 {
+  font-size: 0.725rem !important;
+  font-weight: 700 !important;
+  text-transform: uppercase !important;
+  letter-spacing: 0.08em !important;
+  color: var(--md-text-muted) !important;
+  margin: 0 0 12px 0 !important;
+  border: none !important;
+  padding: 0 !important;
+}
+
+.md-toc-list {
+  list-style: none !important;
+  padding: 0 !important;
+  margin: 0 !important;
+}
+
+.md-toc-item {
+  margin-bottom: 2px !important;
+}
+
+.md-toc-item a {
+  display: block !important;
+  color: var(--md-text-secondary) !important;
+  font-size: 0.825rem !important;
+  font-weight: 400 !important;
+  text-decoration: none !important;
+  padding: 4px 8px !important;
+  border-left: 2px solid transparent !important;
+  line-height: 1.4 !important;
+  transition: all var(--transition-smooth) !important;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.md-toc-item a:hover {
+  color: var(--md-primary) !important;
+  border-left-color: var(--md-border-color) !important;
+}
+
+/* ScrollSpy Highlighted Item */
+.md-toc-item a.active {
+  color: var(--md-primary) !important;
+  border-left-color: var(--md-primary) !important;
+  font-weight: 600 !important;
+}
+
+/* Heading Indentations in TOC */
+.md-toc-level-h2 {
+  padding-left: 8px;
+}
+.md-toc-level-h3 {
+  padding-left: 16px;
+}
+
+/* ==========================================================================
+   Header component (`#py-material-header`)
+   ========================================================================== */
+#py-material-header {
+  position: sticky !important;
+  top: 0 !important;
+  left: 0 !important;
+  right: 0 !important;
+  height: var(--md-header-height) !important;
+  background-color: rgba(var(--md-bg-paper-rgb), 0.8) !important;
+  backdrop-filter: blur(12px) saturate(140%) !important;
+  -webkit-backdrop-filter: blur(12px) saturate(140%) !important;
+  border-bottom: 1px solid var(--md-border-color) !important;
+  display: flex !important;
+  align-items: center !important;
+  padding: 0 24px !important;
+  gap: 16px !important;
+  z-index: 120 !important;
+  box-shadow: var(--md-shadow-sm) !important;
+  box-sizing: border-box !important;
+  transition: background-color var(--transition-smooth), border-color var(--transition-smooth) !important;
+}
+
+.md-header-btn {
+  display: flex !important;
+  align-items: center !important;
+  justify-content: center !important;
+  width: 38px !important;
+  height: 38px !important;
+  border: 1px solid var(--md-border-color) !important;
+  background-color: transparent !important;
+  color: var(--md-text-secondary) !important;
+  border-radius: 8px !important;
+  cursor: pointer !important;
+  transition: all var(--transition-smooth) !important;
+}
+
+.md-header-btn:hover {
+  background-color: var(--md-bg-accent-alpha) !important;
+  color: var(--md-primary) !important;
+  border-color: var(--md-primary) !important;
+}
+
+.md-header-btn svg {
+  width: 20px;
+  height: 20px;
+  fill: none;
+  stroke: currentColor;
+  stroke-width: 2;
+  stroke-linecap: round;
+  stroke-linejoin: round;
+}
+
+/* Sidebar toggle active class */
+.md-header-btn.active {
+  background-color: var(--md-primary) !important;
+  color: #ffffff !important;
+  border-color: var(--md-primary) !important;
+}
+
+.md-header-title {
+  font-weight: 700 !important;
+  font-size: 1.05rem !important;
+  color: var(--md-text-primary) !important;
+  display: flex !important;
+  align-items: center !important;
+  gap: 10px !important;
+  margin: 0 !important;
+  text-decoration: none !important;
+}
+
+.md-header-title img {
+  width: 24px;
+  height: 24px;
+}
+
+/* Header Search Container */
+.md-header-search {
+  position: relative !important;
+  flex: 1 !important;
+  max-width: 440px !important;
+  margin: 0 auto !important;
+  box-sizing: border-box !important;
+}
+
+.md-search-input {
+  width: 100% !important;
+  padding: 8px 12px 8px 38px !important;
+  background-color: var(--md-bg-default) !important;
+  border: 1px solid var(--md-border-color) !important;
+  border-radius: 20px !important;
+  color: var(--md-text-primary) !important;
+  font-family: var(--md-font-sans) !important;
+  font-size: 0.85rem !important;
+  outline: none !important;
+  box-sizing: border-box !important;
+  transition: all var(--transition-smooth) !important;
+}
+
+.md-search-input:focus {
+  border-color: var(--md-primary) !important;
+  box-shadow: 0 0 0 3px rgba(var(--md-primary-rgb), 0.18) !important;
+}
+
+.md-search-icon {
+  position: absolute !important;
+  left: 12px !important;
+  top: 50% !important;
+  transform: translateY(-50%) !important;
+  width: 16px !important;
+  height: 16px !important;
+  color: var(--md-text-muted) !important;
+  pointer-events: none !important;
+}
+
+.md-search-icon svg {
+  width: 100%;
+  height: 100%;
+  fill: none;
+  stroke: currentColor;
+  stroke-width: 2.5;
+  stroke-linecap: round;
+  stroke-linejoin: round;
+}
+
+/* Version switcher details in header */
+.md-header-meta {
+  display: flex !important;
+  align-items: center !important;
+  gap: 12px !important;
+}
+
+/* ALL div.related bars hidden — nav content merged into header via JS */
+div.related {
+  display: none !important;
+}
+
+/* ==========================================================================
+   Header integrated nav (prev/next/index/modules/switchers)
+   ========================================================================== */
+.md-header-nav {
+  display: flex !important;
+  align-items: center !important;
+  gap: 3px !important;
+  flex-shrink: 0 !important;
+}
+
+/* Prev / Next icon-only pill buttons */
+.md-header-nav-btn {
+  display: flex !important;
+  align-items: center !important;
+  justify-content: center !important;
+  width: 30px !important;
+  height: 30px !important;
+  border: 1px solid var(--md-border-color) !important;
+  border-radius: 7px !important;
+  background: transparent !important;
+  color: var(--md-text-secondary) !important;
+  cursor: pointer !important;
+  text-decoration: none !important;
+  transition: all var(--transition-smooth) !important;
+  flex-shrink: 0 !important;
+}
+
+.md-header-nav-btn:hover {
+  background-color: var(--md-bg-accent-alpha) !important;
+  color: var(--md-primary) !important;
+  border-color: var(--md-primary) !important;
+  text-decoration: none !important;
+}
+
+.md-header-nav-btn svg {
+  width: 15px !important;
+  height: 15px !important;
+  fill: none !important;
+  stroke: currentColor !important;
+  stroke-width: 2.5 !important;
+  stroke-linecap: round !important;
+  stroke-linejoin: round !important;
+}
+
+/* Vertical separator line */
+.md-header-sep {
+  display: block !important;
+  width: 1px !important;
+  height: 18px !important;
+  background-color: var(--md-border-color) !important;
+  margin: 0 5px !important;
+  flex-shrink: 0 !important;
+  opacity: 0.6 !important;
+}
+
+/* Index / Modules text links */
+.md-header-nav-link {
+  display: inline-flex !important;
+  align-items: center !important;
+  padding: 4px 8px !important;
+  color: var(--md-text-muted) !important;
+  font-size: 0.75rem !important;
+  font-weight: 500 !important;
+  font-family: var(--md-font-sans) !important;
+  text-decoration: none !important;
+  border-radius: 6px !important;
+  border: 1px solid transparent !important;
+  white-space: nowrap !important;
+  transition: all var(--transition-smooth) !important;
+}
+
+.md-header-nav-link:hover {
+  background-color: var(--md-bg-accent-alpha) !important;
+  color: var(--md-primary) !important;
+  border-color: var(--md-border-color) !important;
+  text-decoration: none !important;
+}
+
+/* Version / Language switcher container */
+.md-header-switchers {
+  display: flex !important;
+  align-items: center !important;
+  gap: 5px !important;
+}
+
+.md-header-switchers .version_switcher_placeholder,
+.md-header-switchers .language_switcher_placeholder {
+  display: inline-block !important;
+}
+
+.md-header-switchers select {
+  background-color: var(--md-bg-default) !important;
+  color: var(--md-text-secondary) !important;
+  border: 1px solid var(--md-border-color) !important;
+  border-radius: 7px !important;
+  padding: 4px 8px !important;
+  font-family: var(--md-font-sans) !important;
+  font-size: 0.75rem !important;
+  font-weight: 500 !important;
+  cursor: pointer !important;
+  outline: none !important;
+  height: 30px !important;
+  transition: border-color var(--transition-smooth), color var(--transition-smooth) !important;
+}
+
+.md-header-switchers select:hover {
+  border-color: var(--md-primary) !important;
+  color: var(--md-text-primary) !important;
+}
+
+
+/* ==========================================================================
+   Code Blocks (`div.highlight`, `pre`)
+   ========================================================================== */
+code, tt, span.pre {
+  font-family: var(--md-font-mono) !important;
+  font-size: 0.85em !important;
+  background-color: var(--md-code-inline-bg) !important;
+  color: var(--md-code-inline-text) !important;
+  padding: 2px 5px !important;
+  border-radius: 4px !important;
+  border: 1px solid var(--md-code-border) !important;
+  white-space: pre-wrap !important;
+  word-break: break-all !important;
+}
+
+a code, a tt, a span.pre {
+  background: none !important;
+  border: none !important;
+  color: inherit !important;
+  padding: 0 !important;
+}
+
+/* Main Pre block styling */
+div.body pre {
+  font-family: var(--md-font-mono) !important;
+  font-size: 0.85rem !important;
+  line-height: 1.6 !important;
+  background-color: var(--md-code-bg) !important;
+  color: var(--md-code-text) !important;
+  border: 1px solid var(--md-code-border) !important;
+  border-radius: 8px !important;
+  padding: 16px 20px !important;
+  margin: 1.25em 0 !important;
+  overflow-x: auto !important;
+  position: relative !important;
+  box-shadow: var(--md-shadow-sm) !important;
+}
+
+html[data-py-theme] .highlight {
+  background-color: transparent !important;
+  color: var(--md-code-text) !important;
+  box-shadow: none !important;
+}
+
+.highlight pre {
+  background: transparent !important;
+  border: none !important;
+  padding: 0 !important;
+  margin: 0 !important;
+  box-shadow: none !important;
+  overflow-x: visible !important;
+}
+
+.highlight {
+  position: relative !important;
+  max-width: 100% !important;
+  overflow-x: hidden !important;
+  box-sizing: border-box !important;
+  border-radius: 8px !important;
+  background-color: var(--md-code-bg) !important;
+  border: 1px solid var(--md-code-border) !important;
+  margin: 1.25em 0 !important;
+}
+
+.highlight pre {
+  padding: 18px 20px !important;
+}
+
+/* Hide Sphinx's built-in copybutton.js button to prevent duplicate/black copy tooltip */
+.copybtn,
+button.copybtn,
+[data-clipboard-target],
+.highlight button[title="Copy to clipboard"],
+.highlight .copy-button {
+  display: none !important;
+}
+
+/* Copy button utility styling */
+.py-copy-btn {
+  position: absolute;
+  top: 10px;
+  right: 10px;
+  z-index: 10;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 5px;
+  padding: 5px 10px;
+  background-color: rgba(var(--md-bg-paper-rgb), 0.92);
+  backdrop-filter: blur(8px);
+  -webkit-backdrop-filter: blur(8px);
+  border: 1px solid var(--md-border-color);
+  color: var(--md-text-secondary);
+  border-radius: 16px;
+  font-family: var(--md-font-sans);
+  font-size: 0.7rem;
+  font-weight: 600;
+  cursor: pointer;
+  opacity: 0;
+  transform: translateY(2px);
+  transition: all var(--transition-smooth);
+  /* Ensure it never renders as a black native button */
+  -webkit-appearance: none;
+  appearance: none;
+  outline: none;
+  box-shadow: var(--md-shadow-sm);
+}
+
+div.highlight:hover .py-copy-btn {
+  opacity: 1;
+  transform: translateY(0);
+}
+
+.py-copy-btn:hover {
+  background-color: var(--md-bg-paper);
+  color: var(--md-primary);
+  border-color: var(--md-primary);
+  box-shadow: 0 0 0 3px rgba(var(--md-primary-rgb), 0.15);
+}
+
+.py-copy-btn.copied {
+  background-color: rgba(16, 185, 129, 0.12);
+  border-color: #10b981;
+  color: #10b981;
+}
+
+.py-copy-btn svg {
+  width: 12px;
+  height: 12px;
+  fill: none;
+  stroke: currentColor;
+  stroke-width: 2.5;
+  stroke-linecap: round;
+  stroke-linejoin: round;
+}
+
+/* ==========================================================================
+   Sphinx Admonition Callouts
+   ========================================================================== */
+div.admonition, div.versionadded, div.versionchanged, div.deprecated {
+  border: 1px solid var(--md-border-color) !important;
+  border-left: 4.5px solid var(--md-primary) !important;
+  border-radius: 6px !important;
+  padding: 16px 18px !important;
+  margin: 1.5em 0 !important;
+  background-color: var(--md-bg-paper) !important;
+  box-shadow: var(--md-shadow-sm) !important;
+}
+
+div.admonition p.admonition-title {
+  font-family: var(--md-font-sans) !important;
+  font-weight: 700 !important;
+  margin-bottom: 8px !important;
+  display: flex !important;
+  align-items: center !important;
+  gap: 8px !important;
+  font-size: 0.9rem !important;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+  color: var(--md-primary);
+}
+
+/* Admonition titles with inline SVG icons (using mask or direct background) */
+div.admonition p.admonition-title::before {
+  content: "" !important;
+  display: inline-block !important;
+  width: 16px !important;
+  height: 16px !important;
+  background-color: currentColor !important;
+  mask-repeat: no-repeat !important;
+  mask-size: contain !important;
+  -webkit-mask-repeat: no-repeat !important;
+  -webkit-mask-size: contain !important;
+}
+
+/* Notes callout specifics */
+div.admonition.note {
+  border-left-color: var(--md-note-color) !important;
+  background-color: var(--md-note-bg) !important;
+}
+div.admonition.note p.admonition-title {
+  color: var(--md-note-color) !important;
+}
+div.admonition.note p.admonition-title::before {
+  mask-image: url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="black" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 20h9"></path><path d="M16.5 3.5a2.121 2.121 0 0 1 3 3L7 19l-4 1 1-4L16.5 3.5z"></path></svg>') !important;
+  -webkit-mask-image: url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="black" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 20h9"></path><path d="M16.5 3.5a2.121 2.121 0 0 1 3 3L7 19l-4 1 1-4L16.5 3.5z"></path></svg>') !important;
+}
+
+/* Warnings callout specifics */
+div.admonition.warning, div.deprecated {
+  border-left-color: var(--md-warning-color) !important;
+  background-color: var(--md-warning-bg) !important;
+}
+div.admonition.warning p.admonition-title {
+  color: var(--md-warning-color) !important;
+}
+div.admonition.warning p.admonition-title::before {
+  mask-image: url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="black" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M10.29 3.86L1.82 18a2 2 0 0 0 1.71 3h16.94a2 2 0 0 0 1.71-3L13.71 3.86a2 2 0 0 0-3.42 0z"></path><line x1="12" y1="9" x2="12" y2="13"></line><line x1="12" y1="17" x2="12.01" y2="17"></line></svg>') !important;
+  -webkit-mask-image: url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="black" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M10.29 3.86L1.82 18a2 2 0 0 0 1.71 3h16.94a2 2 0 0 0 1.71-3L13.71 3.86a2 2 0 0 0-3.42 0z"></path><line x1="12" y1="9" x2="12" y2="13"></line><line x1="12" y1="17" x2="12.01" y2="17"></line></svg>') !important;
+}
+
+/* Versionadded (Success Callout) */
+div.versionadded {
+  border-left-color: var(--md-success-color) !important;
+  background-color: var(--md-success-bg) !important;
+}
+div.versionadded p {
+  margin-bottom: 0 !important;
+  color: var(--md-text-primary) !important;
+  font-size: 0.9rem !important;
+}
+div.versionadded p span.versionmodified {
+  font-weight: 700 !important;
+  color: var(--md-success-color) !important;
+  margin-right: 8px;
+}
+
+/* Versionchanged & deprecated callout */
+div.versionchanged {
+  border-left-color: var(--md-warning-color) !important;
+  background-color: var(--md-warning-bg) !important;
+}
+div.versionchanged p,
+div.deprecated p {
+  margin-bottom: 0 !important;
+  color: var(--md-text-primary) !important;
+  font-size: 0.9rem !important;
+}
+div.versionchanged p span.versionmodified,
+div.deprecated p span.versionmodified {
+  font-weight: 700 !important;
+  color: var(--md-warning-color) !important;
+  margin-right: 8px;
+}
+
+/* See also callout specifics */
+div.admonition.seealso {
+  border-left-color: var(--md-primary) !important;
+  background-color: var(--md-bg-accent-alpha) !important;
+}
+div.admonition.seealso p.admonition-title {
+  color: var(--md-primary) !important;
+}
+div.admonition.seealso p.admonition-title::before {
+  mask-image: url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="black" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6"></path><polyline points="15 3 21 3 21 9"></polyline><line x1="10" y1="14" x2="21" y2="3"></line></svg>') !important;
+  -webkit-mask-image: url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="black" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6"></path><polyline points="15 3 21 3 21 9"></polyline><line x1="10" y1="14" x2="21" y2="3"></line></svg>') !important;
+}
+
+/* ==========================================================================
+   API Definition Cards (`dl`, `dt`, `dd`)
+   ========================================================================== */
+dl.py.function, dl.py.class, dl.py.method, dl.py.attribute, dl.py.data, dl.py.exception {
+  border: 1px solid var(--md-border-color) !important;
+  border-radius: 8px !important;
+  background-color: var(--md-bg-paper) !important;
+  margin: 28px 0 !important;
+  overflow: hidden !important;
+  box-shadow: var(--md-shadow-sm) !important;
+  transition: border-color var(--transition-smooth), box-shadow var(--transition-smooth) !important;
+}
+
+dl.py.function:hover, dl.py.class:hover, dl.py.method:hover {
+  border-color: var(--md-primary) !important;
+  box-shadow: var(--md-shadow-md) !important;
+}
+
+/* Signature header details card background styling */
+dt.sig.sig-object.py {
+  background-color: rgba(var(--md-primary-rgb), 0.03) !important;
+  border-bottom: 1px solid var(--md-border-color) !important;
+  padding: 12px 18px !important;
+  font-family: var(--md-font-mono) !important;
+  font-size: 0.9rem !important;
+  color: var(--md-text-primary) !important;
+  display: flex !important;
+  align-items: center !important;
+  flex-wrap: wrap !important;
+  gap: 2px !important;
+}
+
+/* Highlight the API object name */
+dt.sig.sig-object.py span.sig-name.descname {
+  font-weight: 700 !important;
+  color: var(--md-primary) !important;
+}
+
+dt.sig.sig-object.py em.sig-param {
+  font-style: normal !important;
+  color: var(--md-text-secondary) !important;
+}
+
+/* API Card Description Wrapper */
+dd {
+  padding: 16px 20px !important;
+  margin-left: 0 !important;
+  box-sizing: border-box !important;
+}
+
+dd p:last-child {
+  margin-bottom: 0 !important;
+}
+
+/* ==========================================================================
+   Data Tables (`table.docutils`)
+   ========================================================================== */
+.py-table-wrapper {
+  overflow-x: auto !important;
+  margin: 1.5em 0 !important;
+  border: 1px solid var(--md-border-color) !important;
+  border-radius: 8px !important;
+  box-shadow: var(--md-shadow-sm) !important;
+}
+
+table.docutils {
+  width: 100% !important;
+  border-collapse: collapse !important;
+  font-size: 0.9rem !important;
+  margin: 0 !important;
+}
+
+table.docutils th,
+table.docutils td {
+  padding: 12px 16px !important;
+  text-align: left !important;
+  border: none !important;
+  border-bottom: 1px solid var(--md-border-color) !important;
+  color: var(--md-text-secondary) !important;
+}
+
+table.docutils th {
+  background-color: var(--md-bg-paper) !important;
+  color: var(--md-text-primary) !important;
+  font-weight: 700 !important;
+}
+
+table.docutils tr:last-child td {
+  border-bottom: none !important;
+}
+
+table.docutils tbody tr:hover td {
+  background-color: var(--md-bg-accent-alpha) !important;
+  color: var(--md-text-primary) !important;
+}
+
+/* ==========================================================================
+   Pygments Code Syntax Palette (Light vs Dark vs Sepia)
+   ========================================================================== */
+
+/* Hide >>> (Generic.Prompt) and its trailing whitespace in ALL themes.
+   Root cause fix: Pygments wraps the interactive prompt in <span class="gp">.
+   We hide it so clean code-only output is shown. */
+.highlight .gp,
+.highlight .gp + .w {
+  display: none !important;
+}
+
+/* Base text color for ALL highlight spans — ensures readability before token-specific overrides */
+html[data-py-theme="dark"] .highlight,
+html[data-py-theme="dark"] .highlight pre,
+html[data-py-theme="dark"] .highlight span {
+  color: #e2e8f0 !important;
+}
+
+html[data-py-theme="light"] .highlight,
+html[data-py-theme="light"] .highlight pre,
+html[data-py-theme="light"] .highlight span {
+  color: #1e293b !important;
+}
+
+html[data-py-theme="sepia"] .highlight,
+html[data-py-theme="sepia"] .highlight pre,
+html[data-py-theme="sepia"] .highlight span {
+  color: #433422 !important;
+}
+
+/* --- DARK SYNTAX OVERRIDES ---
+   Palette: One Dark Pro inspired — wide hue distribution for clear token differentiation
+   Hue map: Keywords=violet, Functions=gold, Classes=cyan, Strings=green,
+             Comments=steel-blue-grey, Builtins=orange, Numbers=peach, Names=near-white
+   ------------------------------------------------------------------- */
+
+/* Keywords (if/for/import/return/class/def/etc.) — Soft Violet */
+html[data-py-theme="dark"] .highlight .k,
+html[data-py-theme="dark"] .highlight .kn,
+html[data-py-theme="dark"] .highlight .kp,
+html[data-py-theme="dark"] .highlight .ow {
+  color: #c792ea !important;  /* violet / orchid */
+  font-weight: 600 !important;
+}
+
+/* Function names — Warm Gold */
+html[data-py-theme="dark"] .highlight .nf,
+html[data-py-theme="dark"] .highlight .fm {
+  color: #82aaff !important;  /* soft blue — reads "function call" */
+}
+
+/* Class / Module names — Bright Cyan */
+html[data-py-theme="dark"] .highlight .nc,
+html[data-py-theme="dark"] .highlight .nn {
+  color: #00d4ff !important;  /* brand cyan */
+  font-weight: 600 !important;
+}
+
+/* Strings — Fresh Mint Green */
+html[data-py-theme="dark"] .highlight .s,
+html[data-py-theme="dark"] .highlight .s1,
+html[data-py-theme="dark"] .highlight .s2,
+html[data-py-theme="dark"] .highlight .sd {
+  color: #c3e88d !important;  /* warm lime-green */
+}
+
+/* Comments — Muted Steel Blue-Grey (distinct hue from body text) */
+html[data-py-theme="dark"] .highlight .c,
+html[data-py-theme="dark"] .highlight .c1 {
+  color: #546e7a !important;  /* blue-grey — visually "quiet" */
+  font-style: italic !important;
+}
+
+/* Builtins (print, len, range, etc.) — Warm Orange */
+html[data-py-theme="dark"] .highlight .nb {
+  color: #ffcb6b !important;  /* amber/gold */
+}
+
+/* Numbers (int, float) — Peach/Salmon */
+html[data-py-theme="dark"] .highlight .mi,
+html[data-py-theme="dark"] .highlight .mf {
+  color: #f78c6c !important;  /* peach-orange */
+}
+
+/* Operators & Punctuation — Light Silver */
+html[data-py-theme="dark"] .highlight .o,
+html[data-py-theme="dark"] .highlight .p {
+  color: #89ddff !important;  /* light sky blue */
+}
+
+/* Plain Names / Identifiers */
+html[data-py-theme="dark"] .highlight .n,
+html[data-py-theme="dark"] .highlight .na {
+  color: #e6edf3 !important;  /* near-white — readable neutral */
+}
+
+/* --- LIGHT SYNTAX OVERRIDES ---
+   Palette: GitHub Light / VS Code Light Modern inspired
+   Hue map: Keywords=rich-purple, Functions=royal-blue, Classes=teal,
+             Strings=forest-green, Builtins=burnt-orange, Numbers=crimson,
+             Comments=slate-grey, Operators=steel, Names=near-black
+   All colors verified ≥4.5:1 contrast on white bg
+   ------------------------------------------------------------------- */
+
+/* Keywords (if/for/class/def/import/return) — Rich Purple */
+html[data-py-theme="light"] .highlight .k,
+html[data-py-theme="light"] .highlight .kn,
+html[data-py-theme="light"] .highlight .kp,
+html[data-py-theme="light"] .highlight .ow {
+  color: #7c3aed !important;  /* violet-700 — matches brand */
+  font-weight: 600 !important;
+}
+
+/* Function names — Royal Blue (distinct from purple keywords) */
+html[data-py-theme="light"] .highlight .nf,
+html[data-py-theme="light"] .highlight .fm {
+  color: #1565c0 !important;  /* deep blue-700, 7:1+ on white */
+}
+
+/* Class / Module names — Dark Teal (distinct from blue functions) */
+html[data-py-theme="light"] .highlight .nc,
+html[data-py-theme="light"] .highlight .nn {
+  color: #0d7377 !important;  /* teal, 5.5:1 on white */
+  font-weight: 600 !important;
+}
+
+/* Strings — Forest Green */
+html[data-py-theme="light"] .highlight .s,
+html[data-py-theme="light"] .highlight .s1,
+html[data-py-theme="light"] .highlight .s2,
+html[data-py-theme="light"] .highlight .sd {
+  color: #116329 !important;  /* green-800, 7:1+ on white */
+}
+
+/* Comments — Slate Grey (muted but legible, distinct hue from body text) */
+html[data-py-theme="light"] .highlight .c,
+html[data-py-theme="light"] .highlight .c1 {
+  color: #6e7781 !important;  /* cool grey, 4.8:1 on white */
+  font-style: italic !important;
+}
+
+/* Builtins (print, len, range) — Burnt Orange */
+html[data-py-theme="light"] .highlight .nb {
+  color: #953800 !important;  /* orange-900, 7:1 on white */
+}
+
+/* Numbers (int, float) — Crimson (warm red, clearly different from purple keywords) */
+html[data-py-theme="light"] .highlight .mi,
+html[data-py-theme="light"] .highlight .mf {
+  color: #b91c1c !important;  /* red-700, 5.5:1 on white */
+}
+
+/* Operators & Punctuation — Cool Steel (subdued, not competing) */
+html[data-py-theme="light"] .highlight .o,
+html[data-py-theme="light"] .highlight .p {
+  color: #424a53 !important;  /* cool dark grey */
+}
+
+/* Plain Names / Identifiers — Near-black */
+html[data-py-theme="light"] .highlight .n,
+html[data-py-theme="light"] .highlight .na {
+  color: #1c2333 !important;  /* matches --md-text-primary */
+}
+
+/* --- SEPIA SYNTAX OVERRIDES --- */
+html[data-py-theme="sepia"] .highlight .k,
+html[data-py-theme="sepia"] .highlight .kn,
+html[data-py-theme="sepia"] .highlight .kp,
+html[data-py-theme="sepia"] .highlight .ow {
+  color: #92400e !important; /* Keywords: Amber-800 */
+  font-weight: 600 !important;
+}
+
+html[data-py-theme="sepia"] .highlight .nf,
+html[data-py-theme="sepia"] .highlight .fm {
+  color: #1e3a8a !important; /* Functions: Blue-900 */
+}
+
+html[data-py-theme="sepia"] .highlight .nc,
+html[data-py-theme="sepia"] .highlight .nn {
+  color: #1e40af !important; /* Classes/Modules */
+  font-weight: 600 !important;
+}
+
+html[data-py-theme="sepia"] .highlight .s,
+html[data-py-theme="sepia"] .highlight .s1,
+html[data-py-theme="sepia"] .highlight .s2,
+html[data-py-theme="sepia"] .highlight .sd {
+  color: #065f46 !important; /* Strings: Green-900 */
+}
+
+html[data-py-theme="sepia"] .highlight .c,
+html[data-py-theme="sepia"] .highlight .c1 {
+  color: #78716c !important; /* Comments: Stone-500 — more visible */
+  font-style: italic !important;
+}
+
+html[data-py-theme="sepia"] .highlight .nb {
+  color: #7c3aed !important; /* Builtins: Violet-700 */
+}
+
+html[data-py-theme="sepia"] .highlight .mi,
+html[data-py-theme="sepia"] .highlight .mf {
+  color: #b45309 !important; /* Numbers: Amber-700 */
+}
+
+html[data-py-theme="sepia"] .highlight .o,
+html[data-py-theme="sepia"] .highlight .p {
+  color: #60513e !important; /* Operators/Punctuation */
+}
+
+html[data-py-theme="sepia"] .highlight .n,
+html[data-py-theme="sepia"] .highlight .na {
+  color: #433422 !important; /* Names */
+}
+
+/* ==========================================================================
+   Hide CPython's own top nav bar & menu wrapper (replaced by our header)
+   ========================================================================== */
+nav.nav-content,
+div.menu-wrapper,
+div.menu-wrapper nav.menu {
+  display: none !important;
+}
+
+/* Hide footer and bottom nav bar entirely */
+div.footer {
+  display: none !important;
+}
+
+/* ==========================================================================
+   Ensure body stacks: header → document vertically
+   ========================================================================== */
+body {
+  display: flex !important;
+  flex-direction: column !important;
+}
+
+#py-material-header {
+  flex-shrink: 0 !important;
+}
+
+div.document {
+  flex: 1 !important;
+}
