@@ -1,7 +1,7 @@
 {
   "manifest_version": 3,
   "name": "Python Docs Beautifier - Material Theme",
-  "version": "1.0.0",
+  "version": "1.1.0",
   "description": "A premium theme for Python's official documentation matching the gorgeous MkDocs Material design system.",
   "permissions": [
     "storage"
@@ -15,7 +15,8 @@
     "128": "icons/icon128.png"
   },
   "action": {
-    "default_title": "Python Docs Material Settings"
+    "default_title": "Python Docs Material Settings",
+    "default_popup": "popup.html"
   },
   "content_scripts": [
     {

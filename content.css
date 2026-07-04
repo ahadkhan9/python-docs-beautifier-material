@@ -2,7 +2,7 @@
    Python Docs Beautifier - Material Theme (content.css)
    ========================================================================== */
 
-@import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=JetBrains+Mono:wght@400;500;600;700&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=Lora:ital,wght@0,400;0,500;0,600;0,700;1,400&family=JetBrains+Mono:wght@400;500;600;700&display=swap');
 
 /* ==========================================================================
    Design Tokens & CSS Custom Properties
@@ -55,6 +55,7 @@
   --md-content-max-width: 860px;
   --md-header-height:     58px;
   --font-size-scale:      1;
+  --md-line-height:       1.7;
 
   --md-font-sans: "Inter", -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
   --md-font-mono: "JetBrains Mono", "Fira Code", monospace;
@@ -172,14 +173,15 @@ html:not([data-py-ready]) body {
    Global Resets & Scrollbars
    ========================================================================== */
 html {
+  font-size: calc(15.5px * var(--font-size-scale)) !important;
   overflow-x: hidden;
   box-sizing: border-box;
 }
 
 body {
   font-family: var(--md-font-sans) !important;
-  font-size: calc(15.5px * var(--font-size-scale)) !important;
-  line-height: 1.7 !important;
+  font-size: 1rem !important;
+  line-height: var(--md-line-height, 1.7) !important;
   color: var(--md-text-primary) !important;
   background-color: var(--md-bg-default) !important;
   margin: 0 !important;
@@ -279,7 +281,7 @@ div.documentwrapper {
 
 div.bodywrapper {
   padding: 40px 48px 96px 48px !important;
-  max-width: var(--md-content-max-width) !important;
+  max-width: min(var(--md-content-max-width), 100%) !important;
   margin: 0 auto !important;
   box-sizing: border-box !important;
 }
@@ -335,6 +337,7 @@ p, li, dd {
   margin-top: 0 !important;
   margin-bottom: 1.2em !important;
   font-size: 1rem !important;
+  line-height: inherit !important;
 }
 
 a {
@@ -605,6 +608,14 @@ div.sphinxsidebar #searchbox {
   gap: 10px !important;
   margin: 0 !important;
   text-decoration: none !important;
+}
+
+.md-header-title span {
+  display: inline-block !important;
+  max-width: 120px !important;
+  overflow: hidden !important;
+  text-overflow: ellipsis !important;
+  white-space: nowrap !important;
 }
 
 .md-header-title img {
@@ -1373,4 +1384,49 @@ body {
 
 div.document {
   flex: 1 !important;
+}
+
+/* ==========================================================================
+   Focus Mode & Toast Styles
+   ========================================================================== */
+html[data-py-focus="true"] div.document {
+  grid-template-columns: 0px 1fr 0px !important;
+}
+
+html[data-py-focus="true"] div.sphinxsidebar,
+html[data-py-focus="true"] .md-sidebar-toc {
+  display: none !important;
+}
+
+html[data-py-focus="true"] #py-material-header .md-header-search,
+html[data-py-focus="true"] #py-material-header .md-header-nav,
+html[data-py-focus="true"] #py-material-header .md-header-meta a {
+  display: none !important;
+}
+
+#py-focus-toast {
+  position: fixed !important;
+  bottom: 24px !important;
+  left: 50% !important;
+  transform: translate(-50%, 20px) !important;
+  background-color: rgba(var(--md-bg-paper-rgb), 0.95) !important;
+  backdrop-filter: blur(8px) saturate(140%) !important;
+  -webkit-backdrop-filter: blur(8px) saturate(140%) !important;
+  border: 1px solid var(--md-border-color) !important;
+  color: var(--md-text-primary) !important;
+  padding: 10px 20px !important;
+  border-radius: 20px !important;
+  font-family: var(--md-font-sans) !important;
+  font-size: 0.85rem !important;
+  font-weight: 500 !important;
+  box-shadow: var(--md-shadow-lg) !important;
+  z-index: 9999 !important;
+  opacity: 0 !important;
+  pointer-events: none !important;
+  transition: opacity 0.25s ease, transform 0.25s ease !important;
+}
+
+#py-focus-toast.visible {
+  opacity: 1 !important;
+  transform: translate(-50%, 0) !important;
 }

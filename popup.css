@@ -1,0 +1,482 @@
+/* ==========================================================================
+   Python Docs Beautifier - Settings Popup Styles (popup.css)
+   ========================================================================== */
+
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Lora:ital,wght@0,400;0,500;0,600;0,700;1,400&family=JetBrains+Mono:wght@400;500;600;700&display=swap');
+
+:root {
+  /* Default Theme Tokens: Midnight Slate (Dark) */
+  --pop-bg: #0d1117;
+  --pop-paper: #161b22;
+  --pop-border: #30363d;
+  --pop-text-primary: #e6edf3;
+  --pop-text-secondary: #8b949e;
+  --pop-primary: #00d4ff;
+  --pop-primary-rgb: 0, 212, 255;
+  --pop-accent: #38c9f0;
+  
+  --pop-shadow: 0 8px 32px 0 rgba(0, 0, 0, 0.5);
+  --pop-transition: 0.15s cubic-bezier(0.4, 0, 0.2, 1);
+  --pop-font: "Inter", -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+}
+
+/* Light Theme Variables override */
+[data-theme="light"] {
+  --pop-bg: #ffffff;
+  --pop-paper: #f6f8fa;
+  --pop-border: #d0d7de;
+  --pop-text-primary: #1c2333;
+  --pop-text-secondary: #57606a;
+  --pop-primary: #7c3aed;
+  --pop-primary-rgb: 124, 58, 237;
+  --pop-accent: #6d28d9;
+  
+  --pop-shadow: 0 8px 32px 0 rgba(31, 35, 40, 0.08);
+}
+
+/* Sepia Theme Variables override */
+[data-theme="sepia"] {
+  --pop-bg: #f4edd8;
+  --pop-paper: #eae2cc;
+  --pop-border: #d2caa8;
+  --pop-text-primary: #433422;
+  --pop-text-secondary: #60513e;
+  --pop-primary: #92400e;
+  --pop-primary-rgb: 146, 64, 14;
+  --pop-accent: #b45309;
+  
+  --pop-shadow: 0 8px 32px 0 rgba(67, 52, 34, 0.05);
+}
+
+/* Core resets & setup */
+body {
+  margin: 0;
+  padding: 0;
+  width: 360px;
+  background-color: var(--pop-bg);
+  color: var(--pop-text-primary);
+  font-family: var(--pop-font);
+  font-size: 14px;
+  line-height: 1.5;
+  transition: background-color var(--pop-transition), color var(--pop-transition);
+  overflow-x: hidden;
+  box-sizing: border-box;
+}
+
+.popup-container {
+  display: flex;
+  flex-direction: column;
+  max-height: 560px;
+}
+
+/* Header styling */
+.popup-header {
+  padding: 16px 20px;
+  background-color: var(--pop-paper);
+  border-bottom: 1px solid var(--pop-border);
+  transition: background-color var(--pop-transition), border-color var(--pop-transition);
+}
+
+.header-logo {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+}
+
+.header-logo img {
+  width: 32px;
+  height: 32px;
+  border-radius: 6px;
+}
+
+.header-text h1 {
+  margin: 0;
+  font-size: 16px;
+  font-weight: 700;
+  letter-spacing: -0.01em;
+}
+
+.version-tag {
+  font-size: 11px;
+  color: var(--pop-text-secondary);
+}
+
+/* Warning Banner */
+.warning-banner {
+  background-color: rgba(227, 179, 65, 0.1);
+  border-bottom: 1px solid rgba(227, 179, 65, 0.25);
+  color: #e3b341;
+  padding: 8px 20px;
+  font-size: 12px;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.banner-icon {
+  width: 14px;
+  height: 14px;
+  fill: none;
+  stroke: currentColor;
+  stroke-width: 2;
+  flex-shrink: 0;
+}
+
+/* Main Area */
+.popup-main {
+  padding: 16px 20px;
+  overflow-y: auto;
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+}
+
+.settings-section {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+
+.settings-section h2 {
+  margin: 0;
+  font-size: 11px;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+  color: var(--pop-text-secondary);
+}
+
+/* Theme Cards Layout */
+.theme-cards {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 10px;
+}
+
+.theme-card {
+  background-color: var(--pop-paper);
+  border: 1px solid var(--pop-border);
+  border-radius: 8px;
+  padding: 10px;
+  cursor: pointer;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 8px;
+  transition: all var(--pop-transition);
+}
+
+.theme-card:hover {
+  border-color: var(--pop-primary);
+  background-color: rgba(var(--pop-primary-rgb), 0.04);
+}
+
+.theme-card.active {
+  border-color: var(--pop-primary);
+  box-shadow: 0 0 0 2px rgba(var(--pop-primary-rgb), 0.2);
+}
+
+.theme-swatch {
+  width: 100%;
+  height: 24px;
+  border-radius: 4px;
+  position: relative;
+  border: 1px solid rgba(0,0,0,0.1);
+}
+
+.dark-swatch { background-color: #0d1117; }
+.dark-swatch .swatch-accent { background-color: #00d4ff; }
+
+.light-swatch { background-color: #ffffff; }
+.light-swatch .swatch-accent { background-color: #7c3aed; }
+
+.sepia-swatch { background-color: #f4edd8; }
+.sepia-swatch .swatch-accent { background-color: #92400e; }
+
+.swatch-accent {
+  position: absolute;
+  bottom: 4px;
+  right: 4px;
+  width: 8px;
+  height: 8px;
+  border-radius: 50%;
+}
+
+.theme-label {
+  font-size: 12px;
+  font-weight: 500;
+  color: var(--pop-text-primary);
+}
+
+/* Generic Control Item Layout */
+.setting-item {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+.setting-item.flex-row {
+  flex-direction: row;
+  justify-content: space-between;
+  align-items: center;
+  padding: 4px 0;
+}
+
+.setting-info {
+  display: flex;
+  flex-direction: column;
+}
+
+.setting-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.setting-label {
+  font-size: 13px;
+  font-weight: 500;
+}
+
+.setting-label.font-medium {
+  font-weight: 600;
+}
+
+.setting-subtext {
+  margin: 2px 0 0 0;
+  font-size: 11px;
+  color: var(--pop-text-secondary);
+}
+
+.setting-value {
+  font-size: 12px;
+  font-weight: 600;
+  color: var(--pop-primary);
+  background-color: rgba(var(--pop-primary-rgb), 0.1);
+  padding: 2px 6px;
+  border-radius: 4px;
+}
+
+/* Slider Controls */
+.slider-wrapper {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+
+.nudge-btn {
+  background-color: var(--pop-paper);
+  border: 1px solid var(--pop-border);
+  color: var(--pop-text-primary);
+  width: 28px;
+  height: 28px;
+  border-radius: 6px;
+  cursor: pointer;
+  font-size: 16px;
+  font-weight: 500;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: all var(--pop-transition);
+}
+
+.nudge-btn:hover {
+  background-color: var(--pop-border);
+  border-color: var(--pop-primary);
+  color: var(--pop-primary);
+}
+
+#font-size-slider {
+  flex: 1;
+  -webkit-appearance: none;
+  appearance: none;
+  height: 6px;
+  border-radius: 3px;
+  background: var(--pop-border);
+  outline: none;
+  transition: all var(--pop-transition);
+}
+
+#font-size-slider::-webkit-slider-thumb {
+  -webkit-appearance: none;
+  appearance: none;
+  width: 16px;
+  height: 16px;
+  border-radius: 50%;
+  background: var(--pop-primary);
+  cursor: pointer;
+  box-shadow: 0 2px 4px rgba(0,0,0,0.2);
+  transition: transform var(--pop-transition);
+}
+
+#font-size-slider::-webkit-slider-thumb:hover {
+  transform: scale(1.15);
+}
+
+/* Segmented Control Pill Switchers */
+.segmented-control {
+  display: flex;
+  background-color: var(--pop-paper);
+  border: 1px solid var(--pop-border);
+  border-radius: 8px;
+  padding: 2px;
+  box-sizing: border-box;
+}
+
+.segment-btn {
+  flex: 1;
+  background: transparent;
+  border: none;
+  color: var(--pop-text-secondary);
+  padding: 6px 4px;
+  font-family: var(--pop-font);
+  font-size: 11px;
+  font-weight: 500;
+  border-radius: 6px;
+  cursor: pointer;
+  text-align: center;
+  transition: all var(--pop-transition);
+  white-space: nowrap;
+}
+
+.segment-btn:hover {
+  color: var(--pop-text-primary);
+}
+
+.segment-btn.active {
+  background-color: var(--pop-primary);
+  color: #ffffff !important;
+  font-weight: 600;
+  box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+}
+
+/* Toggle Switch Control */
+.switch-toggle {
+  position: relative;
+  display: inline-block;
+  width: 38px;
+  height: 22px;
+  flex-shrink: 0;
+}
+
+.switch-toggle input {
+  opacity: 0;
+  width: 0;
+  height: 0;
+}
+
+.switch-slider {
+  position: absolute;
+  cursor: pointer;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background-color: var(--pop-border);
+  transition: var(--pop-transition);
+  border-radius: 22px;
+}
+
+.switch-slider:before {
+  position: absolute;
+  content: "";
+  height: 16px;
+  width: 16px;
+  left: 3px;
+  bottom: 3px;
+  background-color: #ffffff;
+  transition: var(--pop-transition);
+  border-radius: 50%;
+  box-shadow: 0 1px 3px rgba(0,0,0,0.25);
+}
+
+input:checked + .switch-slider {
+  background-color: var(--pop-primary);
+}
+
+input:checked + .switch-slider:before {
+  transform: translateX(16px);
+}
+
+/* Shortcuts Legend */
+.shortcuts-legend {
+  background-color: var(--pop-paper);
+  border: 1px solid var(--pop-border);
+  border-radius: 8px;
+  padding: 10px 14px;
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+.shortcut-row {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  font-size: 11px;
+}
+
+.shortcut-row span {
+  color: var(--pop-text-secondary);
+}
+
+kbd {
+  background-color: var(--pop-bg);
+  border: 1px solid var(--pop-border);
+  border-radius: 4px;
+  color: var(--pop-text-primary);
+  display: inline-block;
+  font-family: inherit;
+  font-size: 10px;
+  font-weight: 700;
+  line-height: 1;
+  padding: 4px 6px;
+  box-shadow: 0 1px 0 rgba(0,0,0,0.2);
+}
+
+/* Footer & Reset Control */
+.popup-footer {
+  padding: 12px 20px;
+  background-color: var(--pop-paper);
+  border-top: 1px solid var(--pop-border);
+  display: flex;
+  justify-content: center;
+  transition: background-color var(--pop-transition), border-color var(--pop-transition);
+}
+
+.reset-link {
+  background: transparent;
+  border: none;
+  color: var(--pop-text-secondary);
+  font-family: var(--pop-font);
+  font-size: 11px;
+  text-decoration: underline;
+  cursor: pointer;
+  padding: 4px 8px;
+  border-radius: 4px;
+  transition: all var(--pop-transition);
+}
+
+.reset-link:hover {
+  color: var(--pop-text-primary);
+}
+
+.reset-link.confirm-state {
+  color: #f85149;
+  font-weight: 600;
+  text-decoration: none;
+  background-color: rgba(248, 81, 73, 0.1);
+  border: 1px dashed #f85149;
+}
+
+/* Keyboard accessibility (a11y) outline rules */
+.theme-card:focus-visible,
+.segment-btn:focus-visible,
+.nudge-btn:focus-visible,
+#font-size-slider:focus-visible,
+.switch-toggle input:focus-visible + .switch-slider,
+.reset-link:focus-visible {
+  outline: 2px solid var(--pop-primary) !important;
+  outline-offset: 2px !important;
+}

@@ -57,18 +57,92 @@
     }
   };
 
+  // Constants & Defaults
+  const DEFAULTS = {
+    theme: 'dark',
+    sidebarState: 'expanded',
+    fontSizeScale: '1.0',
+    fontFamily: 'inter',
+    lineSpacing: 'normal',
+    contentWidth: 'standard'
+  };
+
+  const FONT_FAMILIES = {
+    inter: '"Inter", -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif',
+    lora: '"Lora", Georgia, serif',
+    system: '-apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif'
+  };
+
+  const LINE_HEIGHTS = {
+    compact: '1.5',
+    normal: '1.7',
+    relaxed: '2.0'
+  };
+
+  const CONTENT_WIDTHS = {
+    compact: '720px',
+    standard: '860px',
+    wide: '1080px',
+    full: '100%'
+  };
+
+  function applySettings(settings) {
+    const theme = settings.theme || DEFAULTS.theme;
+    const sidebarState = settings.sidebarState || DEFAULTS.sidebarState;
+    const scale = settings.fontSizeScale || DEFAULTS.fontSizeScale;
+    const family = settings.fontFamily || DEFAULTS.fontFamily;
+    const spacing = settings.lineSpacing || DEFAULTS.lineSpacing;
+    const width = settings.contentWidth || DEFAULTS.contentWidth;
+
+    document.documentElement.setAttribute('data-py-theme', theme);
+    document.documentElement.setAttribute('data-py-sidebar', sidebarState);
+    document.documentElement.style.setProperty('--font-size-scale', scale);
+    
+    const fontStack = FONT_FAMILIES[family] || FONT_FAMILIES.inter;
+    document.documentElement.style.setProperty('--md-font-sans', fontStack);
+    
+    const lineHeight = LINE_HEIGHTS[spacing] || LINE_HEIGHTS.normal;
+    document.documentElement.style.setProperty('--md-line-height', lineHeight);
+
+    const maxWidth = CONTENT_WIDTHS[width] || CONTENT_WIDTHS.standard;
+    document.documentElement.style.setProperty('--md-content-max-width', maxWidth);
+
+    // Sync menu toggle button active class on this tab
+    const btnMenu = document.getElementById('md-btn-menu');
+    if (btnMenu) {
+      const isCollapsed = sidebarState === 'collapsed';
+      btnMenu.classList.toggle('active', !isCollapsed);
+    }
+
+    try {
+      sessionStorage.setItem('py_mat_theme', theme);
+      sessionStorage.setItem('py_mat_sidebarState', sidebarState);
+      sessionStorage.setItem('py_mat_fontSizeScale', scale);
+      sessionStorage.setItem('py_mat_fontFamily', family);
+      sessionStorage.setItem('py_mat_lineSpacing', spacing);
+      sessionStorage.setItem('py_mat_contentWidth', width);
+    } catch (e) {}
+  }
+
   // 1. FOUC Avoidance: Apply initial state immediately at document_start
   function applyInitialState() {
-    storage.get(['theme', 'sidebarState', 'fontSizeScale'], (settings) => {
-      const theme = settings.theme || 'dark';
-      const sidebarState = settings.sidebarState || 'expanded';
-      const scale = settings.fontSizeScale || '1.0';
+    try {
+      const cached = {
+        theme: sessionStorage.getItem('py_mat_theme'),
+        sidebarState: sessionStorage.getItem('py_mat_sidebarState'),
+        fontSizeScale: sessionStorage.getItem('py_mat_fontSizeScale'),
+        fontFamily: sessionStorage.getItem('py_mat_fontFamily'),
+        lineSpacing: sessionStorage.getItem('py_mat_lineSpacing'),
+        contentWidth: sessionStorage.getItem('py_mat_contentWidth')
+      };
+      if (cached.theme) {
+        applySettings(cached);
+        document.documentElement.setAttribute('data-py-ready', 'true');
+      }
+    } catch (e) {}
 
-      document.documentElement.setAttribute('data-py-theme', theme);
-      document.documentElement.setAttribute('data-py-sidebar', sidebarState);
-      document.documentElement.style.setProperty('--font-size-scale', scale);
-      
-      // Prevent unstyled flash
+    storage.get(['theme', 'sidebarState', 'fontSizeScale', 'fontFamily', 'lineSpacing', 'contentWidth'], (settings) => {
+      applySettings(settings);
       document.documentElement.setAttribute('data-py-ready', 'true');
     });
   }
@@ -78,9 +152,6 @@
 
   // 2. DOM Ready Actions
   document.addEventListener('DOMContentLoaded', () => {
-    // Recheck states to ensure synchronization
-    applyInitialState();
-
     // Table responsive wrappers
     wrapTables();
 
@@ -320,7 +391,19 @@
           block.appendChild(copyBtn);
 
           copyBtn.addEventListener('click', async () => {
-            const codeText = pre.innerText.replace(/\r\n/g, '\n').replace(/\n$/, '');
+            // Clone pre to clean interactive prompt symbols (>>> and ...) from the clipboard
+            const preClone = pre.cloneNode(true);
+            preClone.querySelectorAll('.gp').forEach(el => {
+              const next = el.nextSibling;
+              if (next && next.nodeType === 1 && next.classList.contains('w')) {
+                next.remove();
+              }
+              el.remove();
+            });
+
+            const codeText = preClone.innerText.replace(/\r\n/g, '\n').replace(/\n$/, '');
+            if (!codeText.trim()) return;
+
             try {
               await navigator.clipboard.writeText(codeText);
               
@@ -356,6 +439,9 @@
     const next = current === 'expanded' ? 'collapsed' : 'expanded';
     
     document.documentElement.setAttribute('data-py-sidebar', next);
+    try {
+      sessionStorage.setItem('py_mat_sidebarState', next);
+    } catch (e) {}
     storage.set({ sidebarState: next });
 
     // Sync button active class
@@ -375,6 +461,9 @@
     const next = order[(order.indexOf(current) + 1) % order.length];
     
     document.documentElement.setAttribute('data-py-theme', next);
+    try {
+      sessionStorage.setItem('py_mat_theme', next);
+    } catch (e) {}
     storage.set({ theme: next });
     return next;
   }
@@ -481,8 +570,12 @@
    */
   function setupKeyboardShortcuts() {
     document.addEventListener('keydown', (e) => {
-      // Ignore keypress when writing in input, textarea, etc.
-      if (['INPUT', 'TEXTAREA', 'SELECT'].includes(document.activeElement.tagName)) {
+      // Ignore keypress when writing in input, textarea, select, or contenteditables
+      if (['INPUT', 'TEXTAREA', 'SELECT'].includes(document.activeElement.tagName) || document.activeElement.isContentEditable) {
+        // Allow escape to blur active inputs
+        if (e.key === 'Escape') {
+          document.activeElement.blur();
+        }
         return;
       }
 
@@ -504,6 +597,112 @@
         e.preventDefault();
         cycleTheme();
       }
+
+      if ((e.key === 'f' || e.key === 'F') && !e.ctrlKey && !e.metaKey && !e.altKey) {
+        e.preventDefault();
+        setFocusMode(!isFocusModeActive());
+      }
+
+      if (e.key === 'Escape') {
+        if (isFocusModeActive()) {
+          e.preventDefault();
+          setFocusMode(false);
+        }
+      }
+
+      if ((e.key === '+' || e.key === '=') && !e.ctrlKey && !e.metaKey && !e.altKey) {
+        e.preventDefault();
+        adjustFontSize(0.05);
+      }
+
+      if ((e.key === '-' || e.key === '_') && !e.ctrlKey && !e.metaKey && !e.altKey) {
+        e.preventDefault();
+        adjustFontSize(-0.05);
+      }
+    });
+  }
+
+  // --- Focus Mode & Font Size Helpers ---
+  function isFocusModeActive() {
+    return document.documentElement.getAttribute('data-py-focus') === 'true';
+  }
+
+  function setFocusMode(active) {
+    if (active) {
+      document.documentElement.setAttribute('data-py-focus', 'true');
+      showFocusToast('Focus Mode Active — Press F or ESC to exit', 2500);
+    } else {
+      document.documentElement.removeAttribute('data-py-focus');
+      showFocusToast('Focus Mode Disabled', 1500);
+    }
+
+    // Notify the popup in case it is currently open
+    if (typeof chrome !== 'undefined' && chrome.runtime && chrome.runtime.sendMessage) {
+      try {
+        chrome.runtime.sendMessage({ action: 'focusModeChanged', value: active }, () => {
+          // Consume runtime error silently if popup is closed
+          const err = chrome.runtime.lastError;
+        });
+      } catch (e) {}
+    }
+  }
+
+  function showFocusToast(message, duration) {
+    let toast = document.getElementById('py-focus-toast');
+    if (!toast) {
+      toast = document.createElement('div');
+      toast.id = 'py-focus-toast';
+      document.body.appendChild(toast);
+    }
+    toast.textContent = message;
+    
+    // Force reflow
+    toast.classList.remove('visible');
+    void toast.offsetWidth;
+    toast.classList.add('visible');
+
+    if (toast.timeoutId) {
+      clearTimeout(toast.timeoutId);
+    }
+    toast.timeoutId = setTimeout(() => {
+      toast.classList.remove('visible');
+    }, duration);
+  }
+
+  function adjustFontSize(delta) {
+    storage.get(['fontSizeScale'], (settings) => {
+      const current = parseFloat(settings.fontSizeScale || DEFAULTS.fontSizeScale);
+      let next = current + delta;
+      next = Math.max(0.85, Math.min(1.50, next));
+      const scaleStr = next.toFixed(2);
+      
+      storage.set({ fontSizeScale: scaleStr }, () => {
+        showFocusToast(`Font size: ${Math.round(next * 100)}%`, 1200);
+      });
+    });
+  }
+
+  // --- Live Settings Sync Listeners ---
+  if (typeof chrome !== 'undefined' && chrome.storage && chrome.storage.onChanged) {
+    chrome.storage.onChanged.addListener((changes, area) => {
+      if (area === 'local') {
+        storage.get(['theme', 'sidebarState', 'fontSizeScale', 'fontFamily', 'lineSpacing', 'contentWidth'], (settings) => {
+          applySettings(settings);
+        });
+      }
+    });
+  }
+
+  if (typeof chrome !== 'undefined' && chrome.runtime && chrome.runtime.onMessage) {
+    chrome.runtime.onMessage.addListener((request, sender, sendResponse) => {
+      if (request.action === 'toggleFocusMode') {
+        const active = request.value !== undefined ? request.value : !isFocusModeActive();
+        setFocusMode(active);
+        sendResponse({ success: true, focusMode: active });
+      } else if (request.action === 'getFocusMode') {
+        sendResponse({ focusMode: isFocusModeActive() });
+      }
+      return true;
     });
   }
 

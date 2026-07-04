@@ -1,0 +1,152 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Python Docs Settings</title>
+  <link rel="stylesheet" href="popup.css">
+</head>
+<body>
+  <div class="popup-container">
+    <!-- Header -->
+    <header class="popup-header">
+      <div class="header-logo">
+        <img src="icons/icon48.png" alt="Logo" onerror="this.src='https://www.python.org/static/favicon.ico'">
+        <div class="header-text">
+          <h1>Python Docs</h1>
+          <span class="version-tag">Material v1.1.0</span>
+        </div>
+      </div>
+    </header>
+
+    <!-- Warning banner for non-docs pages -->
+    <div id="live-preview-banner" class="warning-banner" style="display: none;">
+      <svg class="banner-icon" viewBox="0 0 24 24"><path d="M10.29 3.86L1.82 18a2 2 0 0 0 1.71 3h16.94a2 2 0 0 0 1.71-3L13.71 3.86a2 2 0 0 0-3.42 0z"></path><line x1="12" y1="9" x2="12" y2="13"></line><line x1="12" y1="17" x2="12.01" y2="17"></line></svg>
+      <span>Navigate to docs.python.org to view changes live.</span>
+    </div>
+
+    <!-- Main Content Scroll Area -->
+    <main class="popup-main">
+      <!-- Section: Themes -->
+      <section class="settings-section">
+        <h2>Theme</h2>
+        <div class="theme-cards">
+          <!-- Midnight Slate Card -->
+          <button class="theme-card" data-value="dark" aria-label="Midnight Slate Dark Theme">
+            <div class="theme-swatch dark-swatch">
+              <span class="swatch-accent"></span>
+            </div>
+            <span class="theme-label">Midnight</span>
+          </button>
+          
+          <!-- Daylight Card -->
+          <button class="theme-card" data-value="light" aria-label="Daylight Light Theme">
+            <div class="theme-swatch light-swatch">
+              <span class="swatch-accent"></span>
+            </div>
+            <span class="theme-label">Daylight</span>
+          </button>
+          
+          <!-- Sepia Card -->
+          <button class="theme-card" data-value="sepia" aria-label="Sepia Comfort Theme">
+            <div class="theme-swatch sepia-swatch">
+              <span class="swatch-accent"></span>
+            </div>
+            <span class="theme-label">Sepia</span>
+          </button>
+        </div>
+      </section>
+
+      <!-- Section: Typography -->
+      <section class="settings-section">
+        <h2>Typography</h2>
+        
+        <!-- Font Size Slider -->
+        <div class="setting-item">
+          <div class="setting-header">
+            <span class="setting-label">Font Size</span>
+            <span id="font-size-value" class="setting-value">100%</span>
+          </div>
+          <div class="slider-wrapper">
+            <button id="btn-size-dec" class="nudge-btn" aria-label="Decrease Font Size">−</button>
+            <input type="range" id="font-size-slider" min="0.85" max="1.50" step="0.05" value="1.0" aria-label="Font Size Scale">
+            <button id="btn-size-inc" class="nudge-btn" aria-label="Increase Font Size">+</button>
+          </div>
+        </div>
+
+        <!-- Font Family Selector -->
+        <div class="setting-item">
+          <div class="setting-header">
+            <span class="setting-label">Font Family</span>
+          </div>
+          <div class="segmented-control" id="font-family-control">
+            <button class="segment-btn" data-value="inter">Sans (Inter)</button>
+            <button class="segment-btn" data-value="lora">Serif (Lora)</button>
+            <button class="segment-btn" data-value="system">System Mono</button>
+          </div>
+        </div>
+
+        <!-- Line Spacing Selector -->
+        <div class="setting-item">
+          <div class="setting-header">
+            <span class="setting-label">Line Spacing</span>
+          </div>
+          <div class="segmented-control" id="line-spacing-control">
+            <button class="segment-btn" data-value="compact">Compact</button>
+            <button class="segment-btn" data-value="normal">Normal</button>
+            <button class="segment-btn" data-value="relaxed">Relaxed</button>
+          </div>
+        </div>
+      </section>
+
+      <!-- Section: Reading -->
+      <section class="settings-section">
+        <h2>Reading Layout</h2>
+        
+        <!-- Content Max Width Selector -->
+        <div class="setting-item">
+          <div class="setting-header">
+            <span class="setting-label">Content Width</span>
+          </div>
+          <div class="segmented-control" id="content-width-control">
+            <button class="segment-btn" data-value="compact">720px</button>
+            <button class="segment-btn" data-value="standard">860px</button>
+            <button class="segment-btn" data-value="wide">1080px</button>
+            <button class="segment-btn" data-value="full">Full</button>
+          </div>
+        </div>
+
+        <!-- Focus Mode Toggle -->
+        <div class="setting-item flex-row">
+          <div class="setting-info">
+            <span class="setting-label font-medium">Focus Mode</span>
+            <p class="setting-subtext">Hides sidebar, header, and TOC for reading.</p>
+          </div>
+          <label class="switch-toggle" for="focus-mode-toggle">
+            <input type="checkbox" id="focus-mode-toggle">
+            <span class="switch-slider"></span>
+          </label>
+        </div>
+      </section>
+
+      <!-- Section: Shortcuts Legend -->
+      <section class="settings-section">
+        <h2>Keyboard Hotkeys</h2>
+        <div class="shortcuts-legend">
+          <div class="shortcut-row"><kbd>F</kbd> <span>Toggle Focus Mode</span></div>
+          <div class="shortcut-row"><kbd>T</kbd> <span>Cycle Theme</span></div>
+          <div class="shortcut-row"><kbd>\</kbd> <span>Toggle Sidebar</span></div>
+          <div class="shortcut-row"><kbd>/</kbd> or <kbd>S</kbd> <span>Focus Search Bar</span></div>
+          <div class="shortcut-row"><kbd>+</kbd> / <kbd>−</kbd> <span>Adjust Font Size</span></div>
+        </div>
+      </section>
+    </main>
+
+    <!-- Footer Controls -->
+    <footer class="popup-footer">
+      <button id="btn-reset" class="reset-link" aria-label="Reset all preferences to default">Reset all to default</button>
+    </footer>
+  </div>
+  <script src="popup.js"></script>
+</body>
+</html>
